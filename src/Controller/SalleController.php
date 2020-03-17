@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Event\ModificationEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/salle")
@@ -35,9 +37,16 @@ class SalleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($salle);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($salle);
+            $em->flush();
+            $event = new ModificationEvent('creation salle '.$salle);
+            $dispatcher->dispatch($event,'app.modification');
+           
+
+            //$entityManager = $this->getDoctrine()->getManager();
+            //$entityManager->persist($salle);
+            //$entityManager->flush();
 
             return $this->redirectToRoute('salle_index');
         }
@@ -87,6 +96,12 @@ class SalleController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($salle);
             $entityManager->flush();
+            $event = new ModificationEvent('suppression salle '.$salle);
+            $dispatcher->dispatch($event,'app.modification');
+
+            //$entityManager = $this->getDoctrine()->getManager();
+            //$entityManager->remove($salle);
+            //$entityManager->flush();
         }
 
         return $this->redirectToRoute('salle_index');
