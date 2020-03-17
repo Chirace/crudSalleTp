@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Event\ModificationEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * @Route("/salle")
@@ -41,6 +42,7 @@ class SalleController extends AbstractController
             $em->persist($salle);
             $em->flush();
             $event = new ModificationEvent('creation salle '.$salle);
+            $dispatcher = new EventDispatcher();
             $dispatcher->dispatch($event,'app.modification');
            
 
@@ -97,6 +99,7 @@ class SalleController extends AbstractController
             $entityManager->remove($salle);
             $entityManager->flush();
             $event = new ModificationEvent('suppression salle '.$salle);
+            $dispatcher = new EventDispatcher();
             $dispatcher->dispatch($event,'app.modification');
 
             //$entityManager = $this->getDoctrine()->getManager();
