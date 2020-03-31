@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %} 
+    <h2>Menu de gestion des salles et ordinateurs</h2> 
+    <ul>    
+        <li>
+            <a href="{{ path('salle_index') }}"> Salles</a>
+        </li>     
+        <li>
+            <a href="{{ path('ordinateur_index') }}"> Ordinateurs</a>
+        </li>     
+        <li>
+            <a href="{{ path('logout') }}"> Logout</a>
+        </li>
+    </ul> 
+{% endblock %}
